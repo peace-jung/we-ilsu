@@ -20,7 +20,11 @@ export default function LedgerScreen() {
 }
 
 LedgerScreen.navigationOptions = {
-  title: '장부'
+  title: '장부',
+  headerTintColor: 'blue', // 글자색
+  headerStyle: {
+    backgroundColor: 'red'
+  }
 };
 
 const styles = StyleSheet.create({
