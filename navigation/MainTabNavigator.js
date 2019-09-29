@@ -7,7 +7,7 @@ import {
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import Ledger from '../screens/Ledger';
+import LedgerScreen from '../screens/LedgerScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -40,7 +40,7 @@ HomeStack.path = '';
 
 const LedgerStack = createStackNavigator(
   {
-    Links: Ledger
+    Ledger: LedgerScreen
   },
   config
 );
