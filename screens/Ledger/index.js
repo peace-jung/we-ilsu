@@ -1,2 +1,2 @@
-import LedgerContainer from './LedgerContainer';
-export default LedgerContainer;
+import LedgerScreen from './LedgerScreen';
+export default LedgerScreen;

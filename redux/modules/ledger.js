@@ -5,7 +5,7 @@ const DELETE_LEDGER_ITEM = 'DELETE_LEDGER_ITEM';
 const initialState = {
   list: [
     {
-      title: 'default',
+      title: '장부 1',
       type: 'individual',
       key: String(Date.now()),
       history: []
@@ -28,11 +28,13 @@ function reducer(state = initialState, action) {
 
 const addLedgerList = (state, action) => {
   const { list } = state;
+  const { newLedger } = action;
 
   if (!newLedger && !newLedger.title && !newLedger.type && !newLedger.key)
     return;
-  list.push(action.newLedger);
+  list.unshift(action.newLedger);
 
+  alert('장부가 추가되었습니다.');
   return {
     list
   };
@@ -50,8 +52,6 @@ const updateOneLedger = (state, action) => {
     } else return item;
   });
 
-  console.log(newList);
-
   return {
     list: newList
   };
@@ -63,8 +63,6 @@ const deleteLedgerItem = (state, action) => {
   const newList = list.filter(
     i => items.filter(l => l.key === i.key).length === 0
   );
-
-  // console.log(newList);
 
   return {
     list: newList

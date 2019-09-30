@@ -38,7 +38,7 @@ HomeScreen.navigationOptions = {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#ccc'
+    backgroundColor: '#1f232a'
   },
   container: {
     flex: 1,

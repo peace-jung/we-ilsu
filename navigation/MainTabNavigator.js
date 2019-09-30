@@ -7,7 +7,7 @@ import {
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LedgerScreen from '../screens/LedgerScreen';
+import LedgerScreen from '../screens/Ledger';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
