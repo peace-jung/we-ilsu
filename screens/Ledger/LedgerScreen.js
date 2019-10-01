@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AddLedgerPopupScreen from './AddLedgerPopupScreen';
 
-export default function LedgerScreen() {
+export default function LedgerScreen(props) {
   // redux hook
   const { list } = useSelector(state => state.ledger);
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ export default function LedgerScreen() {
           marginTop: 10
         }}
       >
-        <Text style={{ fontSize: 18 }}>장부 리스트&nbsp;({list.length})</Text>
+        <Text style={{}}>장부 리스트&nbsp;({list.length})</Text>
       </View>
 
       <ScrollView style={{ flex: 1 }}>
@@ -60,6 +60,9 @@ export default function LedgerScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.renderItem}
+              onPress={() => {
+                props.navigation.navigate('Calendar');
+              }}
               onLongPress={() => {
                 dispatch({
                   type: 'DELETE_LEDGER_ITEM',
@@ -82,18 +85,20 @@ export default function LedgerScreen() {
                   <Text style={{ color: '#00bcd4' }}>그룹</Text>
                 )}
               </View>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={1}
-                style={{
-                  color: '#000',
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                  maxWidth: '80%'
-                }}
-              >
-                {item.title}
-              </Text>
+              <View style={{ flex: 1 }}>
+                <Text
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}
+                  style={{
+                    color: '#000',
+                    // fontWeight: 'bold',
+                    // fontSize: 20,
+                    maxWidth: '80%'
+                  }}
+                >
+                  {item.title}
+                </Text>
+              </View>
             </TouchableOpacity>
           )}
         />
@@ -133,14 +138,15 @@ LedgerScreen.navigationOptions = {
   title: '장부',
   headerTintColor: 'white', // 글자색
   headerStyle: {
-    backgroundColor: '#1f232a' // 배경색
-  }
+    backgroundColor: '#1f232a' // 배경색,
+  },
+  headerTitleStyle: { marginHorizontal: 0, width: '100%', textAlign: 'center' }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 10,
     backgroundColor: '#fff'
   },
   renderItem: {
@@ -154,7 +160,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 6,
-    paddingVertical: 3,
+    // paddingVertical: 3,
     marginRight: 4
   },
   // add button

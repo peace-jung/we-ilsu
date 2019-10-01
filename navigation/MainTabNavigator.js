@@ -8,6 +8,7 @@ import {
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LedgerScreen from '../screens/Ledger';
+import CalendarTabNavigator from './CalendarTabNavigator';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -24,35 +25,42 @@ const HomeStack = createStackNavigator(
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  )
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'md-home'} />
 };
 
 HomeStack.path = '';
 
 const LedgerStack = createStackNavigator(
   {
-    Ledger: LedgerScreen
+    Ledger: LedgerScreen,
+    Calendar: {
+      screen: CalendarTabNavigator,
+      navigationOptions: {
+        header: null
+      }
+    }
   },
-  config
+  {
+    ...config,
+    mode: 'modal'
+  }
 );
 
-LedgerStack.navigationOptions = {
-  tabBarLabel: '장부',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  )
+LedgerStack.navigationOptions = ({ navigation }) => {
+  // NOTE hide tabBar inside [Calendar] stack
+  let tabBarVisible = true;
+  let routeName = navigation.state.routes[navigation.state.index].routeName;
+  if (routeName == 'Calendar') {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarLabel: '장부',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon focused={focused} name={'ios-wallet'} />
+    ),
+    tabBarVisible
+  };
 };
 
 LedgerStack.path = '';
@@ -65,12 +73,9 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: '설정',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
+    <TabBarIcon focused={focused} name={'ios-options'} />
   )
 };
 

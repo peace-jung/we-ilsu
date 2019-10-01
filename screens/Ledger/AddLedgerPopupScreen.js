@@ -63,7 +63,7 @@ export default function AddLedgerPopupScreen(props) {
         }}
       >
         <View style={styles.addItemTitle}>
-          <Text style={{ fontSize: 24, color: '#666' }}>장부 등록</Text>
+          <Text style={{ color: '#666' }}>장부 등록</Text>
         </View>
 
         <View style={styles.division} />
@@ -72,8 +72,8 @@ export default function AddLedgerPopupScreen(props) {
           <View style={styles.addItemSection}>
             <Text
               style={{
-                fontWeight: 'bold',
-                fontSize: 20,
+                // fontWeight: 'bold',
+                // fontSize: 20,
                 color: '#666'
               }}
             >
@@ -85,7 +85,7 @@ export default function AddLedgerPopupScreen(props) {
               value={title}
               onChangeText={text => setTitle(text)}
               style={{
-                fontSize: 16,
+                // fontSize: 16,
                 color: '#666',
                 width: '80%',
                 borderBottomWidth: 1,
@@ -99,8 +99,8 @@ export default function AddLedgerPopupScreen(props) {
             <View style={{ marginBottom: 6 }}>
               <Text
                 style={{
-                  fontWeight: 'bold',
-                  fontSize: 20,
+                  // fontWeight: 'bold',
+                  // fontSize: 20,
                   color: '#666'
                 }}
               >
@@ -114,7 +114,7 @@ export default function AddLedgerPopupScreen(props) {
               >
                 <Text
                   style={{
-                    fontSize: 20,
+                    // fontSize: 20,
                     fontWeight: type === 'individual' ? 'bold' : 'normal',
                     color: type === 'individual' ? '#1c90fb' : '#666',
                     textDecorationLine:
@@ -130,7 +130,7 @@ export default function AddLedgerPopupScreen(props) {
               >
                 <Text
                   style={{
-                    fontSize: 20,
+                    // fontSize: 20,
                     fontWeight: type === 'group' ? 'bold' : 'normal',
                     color: type === 'group' ? '#1c90fb' : '#666',
                     textDecorationLine: type === 'group' ? 'underline' : 'none'
@@ -146,7 +146,7 @@ export default function AddLedgerPopupScreen(props) {
         <View style={styles.division} />
 
         <TouchableOpacity style={styles.addItemAction} onPress={onAddTouch}>
-          <Text style={{ fontSize: 20, color: '#1c90fb' }}>추가</Text>
+          <Text style={{ color: '#1c90fb' }}>추가</Text>
         </TouchableOpacity>
       </TouchableOpacity>
     </TouchableOpacity>

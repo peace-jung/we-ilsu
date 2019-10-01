@@ -1,11 +1,22 @@
 import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 
 export default function TabBarIcon(props) {
+  const Comp = (() => {
+    switch (props.type) {
+      case 'Ionicons':
+        return Ionicons;
+      case 'MaterialCommunityIcons':
+        return MaterialCommunityIcons;
+      default:
+        return Ionicons;
+    }
+  })();
+
   return (
-    <Ionicons
+    <Comp
       name={props.name}
       size={26}
       style={{ marginBottom: -3 }}
@@ -13,3 +24,7 @@ export default function TabBarIcon(props) {
     />
   );
 }
+
+TabBarIcon.defaultProps = {
+  type: 'Ionicons'
+};
