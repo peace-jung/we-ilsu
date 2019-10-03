@@ -1,6 +1,8 @@
+// NOTE Action Types
 const ADD_LEDGER_LIST = 'ADD_LEDGER_LIST';
 const UPDATE_ONE_LEDGER = 'UPDATE_ONE_LEDGER';
 const DELETE_LEDGER_ITEM = 'DELETE_LEDGER_ITEM';
+const SET_SELECTED_ITEM = 'SET_SELECTED_ITEM';
 
 const initialState = {
   list: [
@@ -10,9 +12,11 @@ const initialState = {
       key: String(Date.now()),
       history: []
     }
-  ]
+  ],
+  selected: {}
 };
 
+// ANCHOR reducer
 function reducer(state = initialState, action) {
   switch (action.type) {
     case ADD_LEDGER_LIST:
@@ -21,11 +25,14 @@ function reducer(state = initialState, action) {
       return updateOneLedger(state, action);
     case DELETE_LEDGER_ITEM:
       return deleteLedgerItem(state, action);
+    case SET_SELECTED_ITEM:
+      return setSelectedItem(state, action);
     default:
       return state;
   }
 }
 
+// ANCHOR addLedgerList
 const addLedgerList = (state, action) => {
   const { list } = state;
   const { newLedger } = action;
@@ -36,10 +43,12 @@ const addLedgerList = (state, action) => {
 
   alert('장부가 추가되었습니다.');
   return {
+    ...state,
     list
   };
 };
 
+// ANCHOR updateOneLedger
 const updateOneLedger = (state, action) => {
   const { list } = state;
   const { newLedger } = action;
@@ -53,10 +62,12 @@ const updateOneLedger = (state, action) => {
   });
 
   return {
+    ...state,
     list: newList
   };
 };
 
+// ANCHOR deleteLedgerItem
 const deleteLedgerItem = (state, action) => {
   const { list } = state;
   const { items } = action;
@@ -65,7 +76,18 @@ const deleteLedgerItem = (state, action) => {
   );
 
   return {
+    ...state,
     list: newList
+  };
+};
+
+// ANCHOR setSelectedItem
+const setSelectedItem = (state, action) => {
+  const { selected } = action;
+
+  return {
+    ...state,
+    selected
   };
 };
 

@@ -21,9 +21,9 @@ const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export default function CalendarMonthlyScreen() {
+export default function CalendarMonthlyScreen(props) {
   // redux hook
-  const { list } = useSelector(state => state.ledger);
+  const { list, selected } = useSelector(state => state.ledger);
   const dispatch = useDispatch();
 
   // TODO Example Data
@@ -70,6 +70,7 @@ export default function CalendarMonthlyScreen() {
       {/* SECTION Calendar */}
       <View style={styles.calendarContainer}>
         <Text style={{ height: 50 }}>CalendarMonthlyScreen</Text>
+        <Text style={{ height: 50 }}>{selected.title}</Text>
       </View>
 
       {/* SECTION Detail Information About One Day Expenses */}

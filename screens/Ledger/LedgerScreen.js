@@ -49,8 +49,12 @@ export default function LedgerScreen(props) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.renderItem}
-              onPress={() => {
-                props.navigation.navigate('Calendar');
+              onPress={async () => {
+                await dispatch({
+                  type: 'SET_SELECTED_ITEM',
+                  selected: item
+                });
+                props.navigation.push('Calendar');
               }}
               onLongPress={() => {
                 dispatch({
