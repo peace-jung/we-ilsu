@@ -22,17 +22,6 @@ export default function LedgerScreen(props) {
   // state
   const [addModal, setAddModal] = useState(false);
 
-  const viewOpacity = new Animated.Value(0);
-
-  useEffect(() => {
-    addModal &&
-      Animated.timing(viewOpacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true
-      }).start();
-  }, [addModal]);
-
   return (
     <View style={styles.container}>
       <Text style={{ paddingHorizontal: 10 }}>
@@ -116,20 +105,7 @@ export default function LedgerScreen(props) {
         </TouchableOpacity>
       </View>
 
-      {addModal && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            opacity: viewOpacity
-          }}
-        >
-          <AddLedgerPopupScreen setAddModal={setAddModal} />
-        </Animated.View>
-      )}
+      <AddLedgerPopupScreen visible={addModal} setAddModal={setAddModal} />
     </View>
   );
 }
