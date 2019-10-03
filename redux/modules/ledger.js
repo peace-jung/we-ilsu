@@ -10,7 +10,8 @@ const initialState = {
       title: '장부 1',
       type: 'individual',
       key: String(Date.now()),
-      history: []
+      history: [],
+      member: {}
     }
   ],
   selected: {}

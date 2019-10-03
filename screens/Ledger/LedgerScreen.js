@@ -36,7 +36,7 @@ export default function LedgerScreen(props) {
           marginTop: 10
         }}
       >
-        <Text style={{}}>장부 리스트&nbsp;({list.length})</Text>
+        <Text style={{ fontSize: 18 }}>장부 리스트&nbsp;({list.length})</Text>
       </View>
 
       <ScrollView style={{ flex: 1 }}>
@@ -73,9 +73,9 @@ export default function LedgerScreen(props) {
                 ]}
               >
                 {item.type === 'individual' ? (
-                  <Text style={{ color: '#8bc34a' }}>개인</Text>
+                  <Text style={{ color: '#8bc34a', fontSize: 18 }}>개인</Text>
                 ) : (
-                  <Text style={{ color: '#00bcd4' }}>그룹</Text>
+                  <Text style={{ color: '#00bcd4', fontSize: 18 }}>그룹</Text>
                 )}
               </View>
               <View style={{ flex: 1 }}>
@@ -85,7 +85,7 @@ export default function LedgerScreen(props) {
                   style={{
                     color: '#000',
                     // fontWeight: 'bold',
-                    // fontSize: 20,
+                    fontSize: 18,
                     maxWidth: '80%'
                   }}
                 >
@@ -120,7 +120,12 @@ LedgerScreen.navigationOptions = {
   headerStyle: {
     backgroundColor: '#1f232a' // 배경색,
   },
-  headerTitleStyle: { marginHorizontal: 0, width: '100%', textAlign: 'center' }
+  headerTitleStyle: {
+    marginHorizontal: 0,
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 20
+  }
 };
 
 const styles = StyleSheet.create({
@@ -138,9 +143,9 @@ const styles = StyleSheet.create({
   },
   typeIcon: {
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 12,
     paddingHorizontal: 6,
-    // paddingVertical: 3,
+    paddingVertical: 2,
     marginRight: 4
   },
   // add button

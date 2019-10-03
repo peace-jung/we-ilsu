@@ -71,6 +71,9 @@ export default function CalendarMonthlyScreen(props) {
       <View style={styles.calendarContainer}>
         <Text style={{ height: 50 }}>CalendarMonthlyScreen</Text>
         <Text style={{ height: 50 }}>{selected.title}</Text>
+        <Text style={{ height: 50 }}>
+          member : {JSON.stringify(selected.member)}
+        </Text>
       </View>
 
       {/* SECTION Detail Information About One Day Expenses */}

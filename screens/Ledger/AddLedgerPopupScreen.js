@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Animated,
+  ScrollView,
   View,
   Text,
   TextInput,
@@ -14,9 +15,19 @@ export default function AddLedgerPopupScreen(props) {
   const { visible, setAddModal } = props;
 
   // state
-  const [title, setTitle] = useState('');
-  const [type, setType] = useState('individual');
   const [viewOpacity] = useState(new Animated.Value(visible ? 1 : 0));
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState(true); // individual: true, group: false
+  const [users, setUsers] = useState({ [String(Date.now())]: '' });
+
+  useEffect(() => {
+    // 초기화
+    if (!visible) {
+      setTitle('');
+      setType(true);
+      setUsers({ [String(Date.now())]: '' });
+    }
+  }, [visible]);
 
   const opacityAnimated = opacity =>
     Animated.timing(viewOpacity, {
@@ -36,21 +47,49 @@ export default function AddLedgerPopupScreen(props) {
       return;
     }
 
-    if (type === 'group') {
-      alert('아직 지원하지 않습니다.');
-      return;
-    }
+    // SECTION if type is [group]
+    if (!type) {
+      const hasNull = Object.keys(users).filter(user => users[user] === '');
+      if (hasNull.length > 0) {
+        alert('입력되지 않은 멤버가 있습니다.');
+        return;
+      }
 
-    if (type === 'individual') {
+      let isSame = false;
+      Object.values(users).sort((a, b) =>
+        a > b ? 1 : a < b ? -1 : (isSame = true)
+      );
+      if (isSame) {
+        alert('이름이 같은 멤버가 있습니다.');
+        return;
+      }
+
       dispatch({
         type: 'ADD_LEDGER_LIST',
         newLedger: {
           title,
-          type,
-          key: String(Date.now())
+          type: 'group',
+          key: String(Date.now()),
+          member: users
         }
       });
       opacityAnimated(0).start(() => setAddModal(false));
+      return;
+    }
+
+    // SECTION if type is [individual]
+    if (type) {
+      dispatch({
+        type: 'ADD_LEDGER_LIST',
+        newLedger: {
+          title,
+          type: 'individual',
+          key: String(Date.now()),
+          member: {}
+        }
+      });
+      opacityAnimated(0).start(() => setAddModal(false));
+      return;
     }
   };
 
@@ -79,7 +118,7 @@ export default function AddLedgerPopupScreen(props) {
           onPress={() => Keyboard.dismiss()}
           style={{
             width: 280,
-            height: 360,
+            height: 420,
             backgroundColor: '#fff',
             shadowColor: '#00000090',
             shadowOffset: { width: 0, height: 2 },
@@ -89,17 +128,18 @@ export default function AddLedgerPopupScreen(props) {
           }}
         >
           <View style={styles.addItemTitle}>
-            <Text style={{ fontSize: 16, color: '#666' }}>장부 등록</Text>
+            <Text style={{ fontSize: 18, color: '#666' }}>장부 등록</Text>
           </View>
 
           <View style={styles.division} />
 
           <View style={styles.addItemContent}>
+            {/* SECTION Add Ledger Title */}
             <View style={styles.addItemSection}>
               <Text
                 style={{
                   // fontWeight: 'bold',
-                  // fontSize: 20,
+                  fontSize: 18,
                   color: '#666'
                 }}
               >
@@ -111,7 +151,7 @@ export default function AddLedgerPopupScreen(props) {
                 value={title}
                 onChangeText={text => setTitle(text)}
                 style={{
-                  // fontSize: 16,
+                  fontSize: 16,
                   color: '#666',
                   width: '80%',
                   borderBottomWidth: 1,
@@ -121,13 +161,14 @@ export default function AddLedgerPopupScreen(props) {
               />
             </View>
 
+            {/* SECTION Set Ledger Type */}
             <View style={styles.addItemSection}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ marginRight: 12 }}>
                   <Text
                     style={{
                       // fontWeight: 'bold',
-                      // fontSize: 20,
+                      fontSize: 18,
                       color: '#666'
                     }}
                   >
@@ -137,54 +178,105 @@ export default function AddLedgerPopupScreen(props) {
 
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => setType('individual')}
+                  onPress={() => setType(true)}
                   style={{
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                    borderWidth: 1,
-                    borderColor: '#1c90fb',
+                    ...styles.radioStyles,
                     borderRightWidth: 0,
                     borderTopLeftRadius: 10,
                     borderBottomLeftRadius: 10,
-                    backgroundColor: type === 'individual' ? '#1c90fb' : '#fff'
+                    backgroundColor: type ? '#1c90fb' : '#fff'
                   }}
                 >
                   <Text
-                    style={{
-                      color: type === 'individual' ? '#fff' : '#1c90fb'
-                    }}
+                    style={{ fontSize: 16, color: type ? '#fff' : '#1c90fb' }}
                   >
                     개인
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => setType('group')}
+                  onPress={() => setType(false)}
                   style={{
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                    borderWidth: 1,
-                    borderColor: '#1c90fb',
+                    ...styles.radioStyles,
                     borderLeftWidth: 0,
                     borderTopRightRadius: 10,
                     borderBottomRightRadius: 10,
-                    backgroundColor: type === 'group' ? '#1c90fb' : '#fff'
+                    backgroundColor: type ? '#fff' : '#1c90fb'
                   }}
                 >
                   <Text
-                    style={{ color: type === 'group' ? '#fff' : '#1c90fb' }}
+                    style={{ fontSize: 16, color: type ? '#1c90fb' : '#fff' }}
                   >
                     그룹
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* SECTION Add User Input */}
+            {!type && (
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 18, color: '#666' }}>
+                  장부 멤버 ({Object.keys(users).length})
+                </Text>
+
+                <ScrollView style={{ flex: 1 }}>
+                  {Object.keys(users).map(key => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 4
+                      }}
+                      key={key}
+                    >
+                      <TextInput
+                        placeholder={'멤버'}
+                        onEndEditing={event => {
+                          let newer = JSON.parse(JSON.stringify(users));
+                          newer[key] = event.nativeEvent.text;
+                          setUsers(newer);
+                        }}
+                        style={styles.addMemberTextInput}
+                      />
+
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => {
+                          let newer = JSON.parse(JSON.stringify(users));
+                          newer[String(Date.now())] = '';
+                          setUsers(newer);
+                        }}
+                        style={{ fontSize: 16, padding: 6 }}
+                      >
+                        <Text>추가</Text>
+                      </TouchableOpacity>
+
+                      {Object.keys(users).length !== 1 && (
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() => {
+                            if (Object.keys(users).length === 1) return;
+                            let newer = JSON.parse(JSON.stringify(users));
+                            delete newer[key];
+                            setUsers(newer);
+                          }}
+                          style={{ fontSize: 16, padding: 6 }}
+                        >
+                          <Text>삭제</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
 
           <View style={styles.division} />
 
           <TouchableOpacity style={styles.addItemAction} onPress={onAddTouch}>
-            <Text style={{ color: '#1c90fb' }}>추가</Text>
+            <Text style={{ fontSize: 16, color: '#1c90fb' }}>추가</Text>
           </TouchableOpacity>
         </TouchableOpacity>
       </TouchableOpacity>
@@ -193,7 +285,6 @@ export default function AddLedgerPopupScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  // popup
   addItemContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -210,14 +301,29 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     marginHorizontal: 20
   },
+  division: {
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    marginHorizontal: 16
+  },
   addItemSection: { marginBottom: 20 },
   addItemAction: {
     paddingVertical: 20,
     alignItems: 'center'
   },
-  division: {
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginHorizontal: 16
+  radioStyles: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: '#1c90fb'
+  },
+  addMemberTextInput: {
+    fontSize: 16,
+    color: '#666',
+    width: '70%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingVertical: 6,
+    marginRight: 10
   }
 });
