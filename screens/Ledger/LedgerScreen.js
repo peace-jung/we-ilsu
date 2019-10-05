@@ -39,63 +39,62 @@ export default function LedgerScreen(props) {
         <Text style={{ fontSize: 18 }}>장부 리스트&nbsp;({list.length})</Text>
       </View>
 
-      <ScrollView style={{ flex: 1 }}>
-        <Text style={{ width: '100%', textAlign: 'center' }}>
-          항목을 꾸욱 누르면 삭제됩니다.
-        </Text>
-        <FlatList
-          data={list}
-          stateChange={addModal}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.renderItem}
-              onPress={async () => {
-                await dispatch({
-                  type: 'SET_SELECTED_ITEM',
-                  selected: item
-                });
-                props.navigation.push('Calendar');
-              }}
-              onLongPress={() => {
-                dispatch({
-                  type: 'DELETE_LEDGER_ITEM',
-                  items: [item]
-                });
-              }}
+      <Text style={{ width: '100%', textAlign: 'center' }}>
+        항목을 꾸욱 누르면 삭제됩니다.
+      </Text>
+      <FlatList
+        style={{ flex: 1 }}
+        data={list}
+        stateChange={addModal}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.renderItem}
+            onPress={async () => {
+              await dispatch({
+                type: 'SET_SELECTED_ITEM',
+                selected: item
+              });
+              props.navigation.push('Calendar');
+            }}
+            onLongPress={() => {
+              dispatch({
+                type: 'DELETE_LEDGER_ITEM',
+                items: [item]
+              });
+            }}
+          >
+            <View
+              style={[
+                styles.typeIcon,
+                {
+                  borderColor:
+                    item.type === 'individual' ? '#8bc34a' : '#00bcd4'
+                }
+              ]}
             >
-              <View
-                style={[
-                  styles.typeIcon,
-                  {
-                    borderColor:
-                      item.type === 'individual' ? '#8bc34a' : '#00bcd4'
-                  }
-                ]}
+              {item.type === 'individual' ? (
+                <Text style={{ color: '#8bc34a', fontSize: 18 }}>개인</Text>
+              ) : (
+                <Text style={{ color: '#00bcd4', fontSize: 18 }}>그룹</Text>
+              )}
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text
+                ellipsizeMode={'tail'}
+                numberOfLines={1}
+                style={{
+                  color: '#000',
+                  // fontWeight: 'bold',
+                  fontSize: 18,
+                  maxWidth: '80%'
+                }}
               >
-                {item.type === 'individual' ? (
-                  <Text style={{ color: '#8bc34a', fontSize: 18 }}>개인</Text>
-                ) : (
-                  <Text style={{ color: '#00bcd4', fontSize: 18 }}>그룹</Text>
-                )}
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text
-                  ellipsizeMode={'tail'}
-                  numberOfLines={1}
-                  style={{
-                    color: '#000',
-                    // fontWeight: 'bold',
-                    fontSize: 18,
-                    maxWidth: '80%'
-                  }}
-                >
-                  {item.title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </ScrollView>
+                {item.title}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
 
       {/* 장부 추가 버튼 (add list item button) */}
       <View style={styles.addIconCover}>

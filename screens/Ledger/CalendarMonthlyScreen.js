@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
+import CalendarPicker from 'react-native-calendar-picker';
 
 // NOTE get device screen size
 const { width: dWidth, height: dHeight } = Dimensions.get('screen');
@@ -25,6 +26,10 @@ export default function CalendarMonthlyScreen(props) {
   // redux hook
   const { list, selected } = useSelector(state => state.ledger);
   const dispatch = useDispatch();
+
+  // state
+  const [month, setMonth] = useState(new Date().getMonth());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   // TODO Example Data
   const expensesData = [
@@ -54,26 +59,57 @@ export default function CalendarMonthlyScreen(props) {
     { key: '6', date: '6', usage: '밥 값 밥 값', price: 30000, type: '저축' }
   ];
 
-  // state
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-
-  // useEffect(() => {}, []);
-
   return (
     <View style={styles.container}>
       {/* SECTION Monthly Expenses */}
       <View style={styles.monthlyContainer}>
-        <Text style={{}}>{month}월 지출 현황</Text>
+        <Text style={{}}>{month + 1}월 지출 현황</Text>
         <Text style={{}}>총 지출 : {'100만원'}</Text>
+        <Text style={{}}>
+          {selectedDate.getFullYear() +
+            '-' +
+            selectedDate.getMonth() +
+            '-' +
+            selectedDate.getDate()}
+        </Text>
       </View>
 
       {/* SECTION Calendar */}
       <View style={styles.calendarContainer}>
-        <Text style={{ height: 50 }}>CalendarMonthlyScreen</Text>
+        {/* <Text style={{ height: 50 }}>CalendarMonthlyScreen</Text>
         <Text style={{ height: 50 }}>{selected.title}</Text>
         <Text style={{ height: 50 }}>
           member : {JSON.stringify(selected.member)}
-        </Text>
+        </Text> */}
+        <CalendarPicker
+          weekdays={['일', '월', '화', '수', '목', '금', '토']}
+          months={[
+            '1월',
+            '2월',
+            '3월',
+            '4월',
+            '5월',
+            '6월',
+            '7월',
+            '8월',
+            '9월',
+            '10월',
+            '11월',
+            '12월'
+          ]}
+          previousTitle={`${month === 0 ? 12 : month}월`}
+          nextTitle={`${month === 11 ? 1 : month + 2}월`}
+          todayBackgroundColor={'#F2F2F2'}
+          todayTextStyle={{ color: '#333' }}
+          selectedDayStyle={{
+            backgroundColor: '#F2CB05',
+            width: '90%',
+            height: '90%'
+          }}
+          selectedDayTextColor={'#fff'}
+          onMonthChange={month => setMonth(month._i.month)}
+          onDateChange={date => setSelectedDate(date._d)}
+        />
       </View>
 
       {/* SECTION Detail Information About One Day Expenses */}
@@ -106,6 +142,17 @@ export default function CalendarMonthlyScreen(props) {
           )}
         />
       </ScrollView>
+
+      <View style={styles.addIconCover}>
+        <TouchableOpacity
+          onPress={() => {
+            alert('준비중');
+          }}
+          style={styles.addIconButton}
+        >
+          <Ionicons name={'md-add'} size={36} color={'#fff'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -130,9 +177,9 @@ const styles = StyleSheet.create({
   },
   calendarContainer: {
     // NOTE I want to set Square
-    width: Math.min(dWidth, dHeight),
-    height: Math.min(dWidth, dHeight),
-    backgroundColor: '#ececec'
+    width: Math.min(dWidth, dHeight)
+    // height: Math.min(dWidth, dHeight),
+    // backgroundColor: '#ececec'
   },
   expenseDatail: {
     flexDirection: 'row',
@@ -140,6 +187,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ececec',
     padding: 8,
+    alignItems: 'center'
+  },
+  // add button
+  addIconCover: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor: '#F294AD',
+    borderRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 1
+  },
+  addIconButton: {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center'
   }
 });
