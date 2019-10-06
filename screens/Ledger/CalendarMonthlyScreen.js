@@ -25,53 +25,46 @@ const numberWithCommas = x => {
 export default function CalendarMonthlyScreen(props) {
   // redux hook
   const { list, selected } = useSelector(state => state.ledger);
-  const dispatch = useDispatch();
 
   // state
   const [month, setMonth] = useState(new Date().getMonth());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // TODO Example Data
-  const expensesData = [
-    { key: '1', date: '1', usage: '밥 값', price: 30000, type: '저축' },
-    { key: '2', date: '2', usage: '밥 값 밥 값', price: 3333333, type: '저축' },
-    {
-      key: '3',
-      date: '3',
-      usage: '밥 값 밥 값 밥 값',
-      price: 123123123,
-      type: '저축'
-    },
-    {
-      key: '4',
-      date: '4',
-      usage: '밥 값 밥 값 밥 값 밥 값 밥 값 밥 값 밥 값 밥 값',
-      price: 23424234234,
-      type: '저축'
-    },
-    {
-      key: '5',
-      date: '5',
-      usage: '밥 값 밥 값 밥 값',
-      price: 30000,
-      type: '저축'
-    },
-    { key: '6', date: '6', usage: '밥 값 밥 값', price: 30000, type: '저축' }
-  ];
+  const selectedYear = selectedDate.getFullYear();
+  const selectedMonth = selectedDate.getMonth();
+  const selectedData = selectedDate.getDate();
+
+  // ANCHOR history
+  const expenseHistory = list[selected].history[selectedYear]
+    ? list[selected].history[selectedYear][selectedMonth]
+      ? list[selected].history[selectedYear][selectedMonth][selectedData]
+        ? list[selected].history[selectedYear][selectedMonth][selectedData]
+        : {}
+      : {}
+    : {};
+
+  const monthTotal = () => {
+    const month = list[selected].history[selectedYear]
+      ? list[selected].history[selectedYear][selectedMonth]
+        ? Object.values(list[selected].history[selectedYear][selectedMonth])
+        : {}
+      : {};
+
+    let totalPrice = 0;
+    for (let i in month) {
+      for (let j in month[i]) {
+        month[i][j].price && (totalPrice += Number(month[i][j].price));
+      }
+    }
+    return totalPrice;
+  };
 
   return (
     <View style={styles.container}>
       {/* SECTION Monthly Expenses */}
       <View style={styles.monthlyContainer}>
         <Text style={{}}>{month + 1}월 지출 현황</Text>
-        <Text style={{}}>총 지출 : {'100만원'}</Text>
-        <Text style={{}}>
-          {selectedDate.getFullYear() +
-            '-' +
-            selectedDate.getMonth() +
-            '-' +
-            selectedDate.getDate()}
-        </Text>
+        <Text style={{}}>총 지출 : {numberWithCommas(monthTotal())} 원</Text>
       </View>
 
       {/* SECTION Calendar */}
@@ -99,10 +92,10 @@ export default function CalendarMonthlyScreen(props) {
           ]}
           previousTitle={`${month === 0 ? 12 : month}월`}
           nextTitle={`${month === 11 ? 1 : month + 2}월`}
-          todayBackgroundColor={'#F2F2F2'}
-          todayTextStyle={{ color: '#333' }}
+          todayBackgroundColor={'#67B38C'}
+          todayTextStyle={{ color: '#fff' }}
           selectedDayStyle={{
-            backgroundColor: '#F2CB05',
+            backgroundColor: '#FFD002',
             width: '90%',
             height: '90%'
           }}
@@ -114,19 +107,19 @@ export default function CalendarMonthlyScreen(props) {
 
       {/* SECTION Detail Information About One Day Expenses */}
       <ScrollView style={{ flex: 1 }}>
-        {expensesData.length === 0 && (
-          <View
-            style={{
-              flex: 1,
-              paddingTop: 30,
-              alignItems: 'center'
-            }}
-          >
-            <Text style={{ color: '#999' }}>데이터가 없습니다.</Text>
-          </View>
-        )}
         <FlatList
-          data={expensesData}
+          data={Object.values(expenseHistory)}
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 30,
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ color: '#999' }}>데이터가 없습니다.</Text>
+            </View>
+          }
           renderItem={({ item }) => (
             <View style={styles.expenseDatail}>
               <Text>{item.type}</Text>
@@ -146,7 +139,10 @@ export default function CalendarMonthlyScreen(props) {
       <View style={styles.addIconCover}>
         <TouchableOpacity
           onPress={() => {
-            alert('준비중');
+            props.navigation.navigate({
+              routeName: 'AddExpenseData',
+              params: { selectedDate }
+            });
           }}
           style={styles.addIconButton}
         >
@@ -194,7 +190,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 30,
-    backgroundColor: '#F294AD',
+    backgroundColor: '#FD694F',
     borderRadius: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },

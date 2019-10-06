@@ -9,6 +9,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LedgerScreen from '../screens/Ledger';
 import CalendarTabNavigator from './CalendarTabNavigator';
+import AddExpenseDataScreen from '../screens/Ledger/AddExpenseDataScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -38,7 +39,8 @@ const LedgerStack = createStackNavigator(
       navigationOptions: {
         header: null
       }
-    }
+    },
+    AddExpenseData: AddExpenseDataScreen
   },
   {
     ...config,
@@ -50,7 +52,7 @@ LedgerStack.navigationOptions = ({ navigation }) => {
   // NOTE hide tabBar inside [Calendar] stack
   let tabBarVisible = true;
   let routeName = navigation.state.routes[navigation.state.index].routeName;
-  if (routeName == 'Calendar') {
+  if (routeName === 'Calendar' || routeName === 'AddExpenseData') {
     tabBarVisible = false;
   }
 

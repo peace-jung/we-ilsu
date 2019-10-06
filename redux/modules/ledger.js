@@ -3,17 +3,26 @@ const ADD_LEDGER_LIST = 'ADD_LEDGER_LIST';
 const UPDATE_ONE_LEDGER = 'UPDATE_ONE_LEDGER';
 const DELETE_LEDGER_ITEM = 'DELETE_LEDGER_ITEM';
 const SET_SELECTED_ITEM = 'SET_SELECTED_ITEM';
+const ADD_HISTORY_ITEM = 'ADD_HISTORY_ITEM';
 
 const initialState = {
-  list: [
-    {
+  list: {
+    [String(Date.now())]: {
       title: '장부 1',
       type: 'individual',
-      key: String(Date.now()),
-      history: [],
+      history: {},
       member: {}
     }
-  ],
+  },
+  // list: [
+  //   {
+  //     title: '장부 1',
+  //     type: 'individual',
+  //     key: String(Date.now()),
+  //     history: {},
+  //     member: {}
+  //   }
+  // ],
   selected: {}
 };
 
@@ -28,6 +37,8 @@ function reducer(state = initialState, action) {
       return deleteLedgerItem(state, action);
     case SET_SELECTED_ITEM:
       return setSelectedItem(state, action);
+    case ADD_HISTORY_ITEM:
+      return addHistoryItem(state, action);
     default:
       return state;
   }
@@ -40,12 +51,14 @@ const addLedgerList = (state, action) => {
 
   if (!newLedger && !newLedger.title && !newLedger.type && !newLedger.key)
     return;
-  list.unshift(action.newLedger);
 
   alert('장부가 추가되었습니다.');
   return {
     ...state,
-    list
+    list: {
+      ...list,
+      ...newLedger
+    }
   };
 };
 
@@ -72,9 +85,11 @@ const updateOneLedger = (state, action) => {
 const deleteLedgerItem = (state, action) => {
   const { list } = state;
   const { items } = action;
-  const newList = list.filter(
-    i => items.filter(l => l.key === i.key).length === 0
-  );
+
+  const newList = JSON.parse(JSON.stringify(list));
+  for (let i in items) {
+    delete newList[items[i]];
+  }
 
   return {
     ...state,
@@ -89,6 +104,30 @@ const setSelectedItem = (state, action) => {
   return {
     ...state,
     selected
+  };
+};
+
+// ANCHOR addHistoryItem
+const addHistoryItem = (state, action) => {
+  const { list, selected } = state;
+  const { selectedDate, data } = action;
+
+  const newList = JSON.parse(JSON.stringify(list));
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth();
+  const date = selectedDate.getDate();
+
+  // Check Object is undefind
+  if (!newList[selected].history[year]) newList[selected].history[year] = {};
+  if (!newList[selected].history[year][month])
+    newList[selected].history[year][month] = {};
+  if (!newList[selected].history[year][month][date])
+    newList[selected].history[year][month][date] = [];
+  newList[selected].history[year][month][date].push(data);
+
+  return {
+    ...state,
+    list: newList
   };
 };
 

@@ -67,10 +67,12 @@ export default function AddLedgerPopupScreen(props) {
       dispatch({
         type: 'ADD_LEDGER_LIST',
         newLedger: {
-          title,
-          type: 'group',
-          key: String(Date.now()),
-          member: users
+          [String(Date.now())]: {
+            title,
+            type: 'group',
+            history: {},
+            member: users
+          }
         }
       });
       opacityAnimated(0).start(() => setAddModal(false));
@@ -82,10 +84,12 @@ export default function AddLedgerPopupScreen(props) {
       dispatch({
         type: 'ADD_LEDGER_LIST',
         newLedger: {
-          title,
-          type: 'individual',
-          key: String(Date.now()),
-          member: {}
+          [String(Date.now())]: {
+            title,
+            type: 'individual',
+            history: {},
+            member: {}
+          }
         }
       });
       opacityAnimated(0).start(() => setAddModal(false));

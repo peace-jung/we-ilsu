@@ -44,7 +44,7 @@ export default function LedgerScreen(props) {
       </Text>
       <FlatList
         style={{ flex: 1 }}
-        data={list}
+        data={Object.keys(list)}
         stateChange={addModal}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -68,17 +68,17 @@ export default function LedgerScreen(props) {
                 styles.typeIcon,
                 {
                   borderColor:
-                    item.type === 'individual' ? '#8bc34a' : '#00bcd4'
+                    list[item].type === 'individual' ? '#8bc34a' : '#00bcd4'
                 }
               ]}
             >
-              {item.type === 'individual' ? (
+              {list[item].type === 'individual' ? (
                 <Text style={{ color: '#8bc34a', fontSize: 18 }}>개인</Text>
               ) : (
                 <Text style={{ color: '#00bcd4', fontSize: 18 }}>그룹</Text>
               )}
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
@@ -89,7 +89,7 @@ export default function LedgerScreen(props) {
                   maxWidth: '80%'
                 }}
               >
-                {item.title}
+                {list[item].title}
               </Text>
             </View>
           </TouchableOpacity>
