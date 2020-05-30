@@ -19,8 +19,8 @@ const numberWithCommas = x => {
 };
 
 // NOTE Division N by Array
-Array.prototype.division = function(n) {
-  let arr = JSON.parse(JSON.stringify(this));
+const Division = function (array: any[], n: number) {
+  let arr = JSON.parse(JSON.stringify(array));
   let len = arr.length;
   let cnt = Math.floor(len / n);
   let tmp = [];
@@ -52,7 +52,7 @@ export default function AddExpenseDataScreen(props) {
       <View style={styles.textInputPrice}>
         <TextInput
           keyboardType={'number-pad'}
-          placeholder="지출 금액"
+          // placeholder="지출 금액"
           style={{ flex: 1, fontSize: 60, textAlign: 'right' }}
           placeholder={'0'}
           value={numberWithCommas(price)}
@@ -61,7 +61,7 @@ export default function AddExpenseDataScreen(props) {
       </View>
 
       <View style={{ marginTop: 20, paddingHorizontal: 10 }}>
-        {typeList.division(5).map((list, i) => (
+        {Division(typeList, 5).map((list, i) => (
           <View key={i} style={{ flexDirection: 'row' }}>
             {list.map((item, j) => (
               <TouchableOpacity
@@ -98,7 +98,7 @@ export default function AddExpenseDataScreen(props) {
             const data = {
               price: Number(price.replace(/,/g, '')) || 0,
               usage: content,
-              type: typeList.division(5)[Number(type.split(/,/)[0])][
+              type: Division(typeList, 5)[Number(type.split(/,/)[0])][
                 Number(type.split(/,/)[1])
               ]
             };

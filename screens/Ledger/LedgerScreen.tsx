@@ -14,6 +14,16 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AddLedgerPopupScreen from './AddLedgerPopupScreen';
 
+const COLOR = [
+  'rgb(244,67,54)', // red
+  'rgb(255,152,0)', // orange
+  'rgb(052,168,83)', // green
+  'rgb(3,169,244)', // blue
+  'rgb(138,141,146)', // gray
+  'rgb(96,125,139)', // blue-gray
+  'rgb(121,85,71)', // brown
+];
+
 export default function LedgerScreen(props) {
   // redux hook
   const { list } = useSelector(state => state.ledger);
@@ -47,7 +57,8 @@ export default function LedgerScreen(props) {
             style={Object.assign(
               {},
               styles.renderItem,
-              index === 0 && { marginTop: 10 }
+              index === 0 && { marginTop: 10 },
+              { backgroundColor: COLOR[Number(index) % 7] }
             )}
             onPress={() => {
               dispatch({
@@ -83,7 +94,7 @@ export default function LedgerScreen(props) {
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
                 style={{
-                  color: '#000',
+                  color: '#fff',
                   // fontWeight: 'bold',
                   fontSize: 18,
                   maxWidth: '80%'
@@ -155,19 +166,19 @@ const styles = StyleSheet.create({
   addIconCover: {
     position: 'absolute',
     bottom: 50,
-    right: 40,
-    backgroundColor: '#000',
+    right: 40
+  },
+  addIconButton: {
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1f232a',
     borderRadius: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1
-  },
-  addIconButton: {
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 });

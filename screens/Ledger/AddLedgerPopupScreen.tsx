@@ -56,9 +56,14 @@ export default function AddLedgerPopupScreen(props) {
       }
 
       let isSame = false;
-      Object.values(users).sort((a, b) =>
-        a > b ? 1 : a < b ? -1 : (isSame = true)
-      );
+      Object.values(users).sort((a, b) => {
+        if (a > b) return 1;
+        else if (a < b) return -1;
+        else {
+          isSame = true;
+          return 0;
+        }
+      });
       if (isSame) {
         alert('이름이 같은 멤버가 있습니다.');
         return;
@@ -252,9 +257,9 @@ export default function AddLedgerPopupScreen(props) {
                           newer[String(Date.now())] = '';
                           setUsers(newer);
                         }}
-                        style={{ fontSize: 16, padding: 6 }}
+                        style={{ padding: 6 }}
                       >
-                        <Text>추가</Text>
+                        <Text style={{ fontSize: 16 }}>추가</Text>
                       </TouchableOpacity>
 
                       {Object.keys(users).length !== 1 && (
@@ -266,9 +271,9 @@ export default function AddLedgerPopupScreen(props) {
                             delete newer[key];
                             setUsers(newer);
                           }}
-                          style={{ fontSize: 16, padding: 6 }}
+                          style={{ padding: 6 }}
                         >
-                          <Text>삭제</Text>
+                          <Text style={{ fontSize: 16 }}>삭제</Text>
                         </TouchableOpacity>
                       )}
                     </View>
