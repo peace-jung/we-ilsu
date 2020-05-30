@@ -1,4 +1,5 @@
 // NOTE Action Types
+const SET_INITIAL_STATE = 'SET_INITIAL_STATE';
 const ADD_LEDGER_LIST = 'ADD_LEDGER_LIST';
 const UPDATE_ONE_LEDGER = 'UPDATE_ONE_LEDGER';
 const DELETE_LEDGER_ITEM = 'DELETE_LEDGER_ITEM';
@@ -29,6 +30,8 @@ const initialState = {
 // ANCHOR reducer
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_INITIAL_STATE:
+      return initialState;
     case ADD_LEDGER_LIST:
       return addLedgerList(state, action);
     case UPDATE_ONE_LEDGER:

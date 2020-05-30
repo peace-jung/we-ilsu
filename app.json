@@ -25,11 +25,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.uiuxcore.ilsu"
+      "bundleIdentifier": "com.peacejung.accountbook"
     },
     "android": {
-      "package": "com.uiuxcore.ilsu"
+      "package": "com.peacejung.accountbook"
     },
-    "description": ""
+    "description": "multiple account book"
   }
 }

@@ -106,7 +106,8 @@ export default function AddLedgerPopupScreen(props) {
         bottom: 0,
         left: 0,
         right: 0,
-        opacity: viewOpacity
+        opacity: viewOpacity,
+        zIndex: visible ? 1 : -1
       }}
     >
       <TouchableOpacity

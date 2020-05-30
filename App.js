@@ -31,7 +31,7 @@ export default function App(props) {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" hidden={false} />}
+            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" hidden={false} />}
             <AppNavigator />
           </View>
         </PersistGate>
