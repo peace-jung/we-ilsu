@@ -24,33 +24,33 @@ export default function LedgerScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ paddingHorizontal: 10 }}>
-        지금부터 너의 돈을 걷도록 하겠다..
-      </Text>
-
-      <View
+      {/* <View
         style={{
           backgroundColor: '#f7f7f7',
           paddingVertical: 10,
-          paddingHorizontal: 10,
-          marginTop: 10
+          paddingHorizontal: 10
         }}
       >
         <Text style={{ fontSize: 18 }}>장부 리스트&nbsp;({list.length})</Text>
-      </View>
+      </View> */}
 
-      <Text style={{ width: '100%', textAlign: 'center' }}>
+      {/* <Text style={{ width: '100%', textAlign: 'center' }}>
         항목을 꾸욱 누르면 삭제됩니다.
-      </Text>
+      </Text> */}
       <FlatList
-        style={{ flex: 1 }}
+        style={styles.listContainer}
         data={Object.keys(list)}
-        stateChange={addModal}
-        renderItem={({ item }) => (
+        extraData={addModal}
+        keyExtractor={item => item}
+        renderItem={({ item, index }) => (
           <TouchableOpacity
-            style={styles.renderItem}
-            onPress={async () => {
-              await dispatch({
+            style={Object.assign(
+              {},
+              styles.renderItem,
+              index === 0 && { marginTop: 10 }
+            )}
+            onPress={() => {
+              dispatch({
                 type: 'SET_SELECTED_ITEM',
                 selected: item
               });
@@ -63,7 +63,7 @@ export default function LedgerScreen(props) {
               });
             }}
           >
-            <View
+            {/* <View
               style={[
                 styles.typeIcon,
                 {
@@ -73,11 +73,11 @@ export default function LedgerScreen(props) {
               ]}
             >
               {list[item].type === 'individual' ? (
-                <Text style={{ color: '#8bc34a', fontSize: 18 }}>개인</Text>
+                <Text style={{ color: '#8bc34a', fontSize: 14 }}>개인</Text>
               ) : (
-                <Text style={{ color: '#00bcd4', fontSize: 18 }}>그룹</Text>
+                <Text style={{ color: '#00bcd4', fontSize: 14 }}>그룹</Text>
               )}
-            </View>
+            </View> */}
             <View style={{ flex: 1, justifyContent: 'center' }}>
               <Text
                 ellipsizeMode={'tail'}
@@ -130,15 +130,19 @@ LedgerScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
-    backgroundColor: '#fff'
+    backgroundColor: '#00000020'
+  },
+  listContainer: {
+    flex: 1,
+    paddingHorizontal: 10
   },
   renderItem: {
     flexDirection: 'row',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ececec'
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    height: 100,
+    backgroundColor: '#fff'
   },
   typeIcon: {
     borderWidth: 1,
@@ -150,7 +154,7 @@ const styles = StyleSheet.create({
   // add button
   addIconCover: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 50,
     right: 40,
     backgroundColor: '#000',
     borderRadius: 30,
