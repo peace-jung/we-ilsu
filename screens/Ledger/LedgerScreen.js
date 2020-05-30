@@ -130,7 +130,7 @@ LedgerScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00000020'
+    backgroundColor: '#00000010'
   },
   listContainer: {
     flex: 1,

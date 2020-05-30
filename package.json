@@ -1,9 +1,9 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "sudo expo start",
+    "android": "sudo expo start --android",
+    "ios": "sudo expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll"
@@ -15,6 +15,9 @@
     "@expo/samples": "~3.0.3",
     "@expo/vector-icons": "^10.0.0",
     "@react-navigation/web": "^1.0.0-alpha.9",
+    "@types/node": "^14.0.6",
+    "@types/react": "^16.9.35",
+    "@types/react-native": "^0.62.12",
     "expo": "^37.0.0",
     "expo-asset": "~8.1.5",
     "expo-constants": "~9.0.0",
@@ -32,7 +35,8 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typescript": "^3.9.3"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.1.0",
