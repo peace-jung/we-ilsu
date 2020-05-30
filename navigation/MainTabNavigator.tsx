@@ -12,7 +12,7 @@ import CalendarTabNavigator from './CalendarTabNavigator';
 import AddExpenseDataScreen from '../screens/Ledger/AddExpenseDataScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const config = Platform.select({
+const config: any = Platform.select({
   web: { headerMode: 'screen' },
   default: {}
 });
@@ -25,11 +25,11 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: '홈',
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'md-home'} />
 };
 
-HomeStack.path = '';
+// HomeStack.path = '';
 
 const LedgerStack = createStackNavigator(
   {
@@ -65,7 +65,7 @@ LedgerStack.navigationOptions = ({ navigation }) => {
   };
 };
 
-LedgerStack.path = '';
+// LedgerStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -81,14 +81,19 @@ SettingsStack.navigationOptions = {
   )
 };
 
-SettingsStack.path = '';
+// SettingsStack.path = '';
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LedgerStack,
-  SettingsStack
-});
+const tabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    LedgerStack,
+    SettingsStack
+  },
+  {
+    initialRouteName: 'LedgerStack'
+  }
+);
 
-tabNavigator.path = '';
+// tabNavigator.path = '';
 
 export default tabNavigator;

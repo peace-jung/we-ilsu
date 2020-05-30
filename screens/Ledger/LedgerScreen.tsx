@@ -21,7 +21,7 @@ const COLOR = [
   'rgb(3,169,244)', // blue
   'rgb(138,141,146)', // gray
   'rgb(96,125,139)', // blue-gray
-  'rgb(121,85,71)', // brown
+  'rgb(121,85,71)' // brown
 ];
 
 export default function LedgerScreen(props) {
@@ -54,12 +54,7 @@ export default function LedgerScreen(props) {
         keyExtractor={item => item}
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            style={Object.assign(
-              {},
-              styles.renderItem,
-              index === 0 && { marginTop: 10 },
-              { backgroundColor: COLOR[Number(index) % 7] }
-            )}
+            activeOpacity={0.8}
             onPress={() => {
               dispatch({
                 type: 'SET_SELECTED_ITEM',
@@ -73,6 +68,12 @@ export default function LedgerScreen(props) {
                 items: [item]
               });
             }}
+            style={Object.assign(
+              {},
+              styles.renderItem,
+              index === 0 && { marginTop: 10 },
+              { backgroundColor: COLOR[Number(index) % 7] }
+            )}
           >
             {/* <View
               style={[
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     marginBottom: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     height: 100,
     backgroundColor: '#fff'
   },

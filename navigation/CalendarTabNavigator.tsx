@@ -10,7 +10,7 @@ import CalendarMonthlyScreen from '../screens/Ledger/CalendarMonthlyScreen';
 import CalendarWeeklyScreen from '../screens/Ledger/CalendarWeeklyScreen';
 import CalendarDailyScreen from '../screens/Ledger/CalendarDailyScreen';
 
-const config = Platform.select({
+const config: any = Platform.select({
   web: { headerMode: 'screen' },
   default: { mode: 'card' }
 });
@@ -33,7 +33,7 @@ MonthlyStack.navigationOptions = {
   )
 };
 
-MonthlyStack.path = '';
+// MonthlyStack.path = '';
 
 const WeeklyStack = createStackNavigator(
   {
@@ -53,7 +53,7 @@ WeeklyStack.navigationOptions = {
   )
 };
 
-WeeklyStack.path = '';
+// WeeklyStack.path = '';
 
 const DailyStack = createStackNavigator(
   {
@@ -69,7 +69,7 @@ DailyStack.navigationOptions = {
   )
 };
 
-DailyStack.path = '';
+// DailyStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   MonthlyStack,
@@ -77,6 +77,6 @@ const tabNavigator = createBottomTabNavigator({
   DailyStack
 });
 
-tabNavigator.path = '';
+// tabNavigator.path = '';
 
 export default tabNavigator;
