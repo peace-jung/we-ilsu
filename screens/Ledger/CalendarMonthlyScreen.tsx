@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
-import CalendarPicker from 'react-native-calendar-picker';
+// import CalendarPicker from 'react-native-calendar-picker';
+import CalendarPicker from '@lib/react-native-calendar-picker';
 
 // NOTE get device screen size
 const { width: dWidth, height: dHeight } = Dimensions.get('screen');
@@ -99,6 +100,7 @@ export default function CalendarMonthlyScreen(props) {
           nextTitle={`${dateObj.month === 11 ? 1 : dateObj.month + 2}월`}
           todayBackgroundColor={'#67B38C'}
           todayTextStyle={{ color: '#fff' }}
+          customContainerStyle={{backgroundColor: 'red'}}
           selectedDayStyle={{
             backgroundColor: '#FFD002',
             width: '90%',
