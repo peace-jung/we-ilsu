@@ -27,7 +27,10 @@ export default function CalendarMonthlyScreen(props) {
   const { list, selected } = useSelector(state => state.ledger);
 
   // state
-  const [month, setMonth] = useState(new Date().getMonth());
+  const [dateObj, setDateObj] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth()
+  });
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const selectedYear = selectedDate.getFullYear();
@@ -43,17 +46,17 @@ export default function CalendarMonthlyScreen(props) {
       : {}
     : {};
 
-  const monthTotal = () => {
-    const month = list[selected].history[selectedYear]
-      ? list[selected].history[selectedYear][selectedMonth]
-        ? Object.values(list[selected].history[selectedYear][selectedMonth])
+  const monthTotal = (month: number) => {
+    const monthObj = list[selected].history[selectedYear]
+      ? list[selected].history[selectedYear][month]
+        ? Object.values(list[selected].history[selectedYear][month])
         : {}
       : {};
 
     let totalPrice = 0;
-    for (let i in month) {
-      for (let j in month[i]) {
-        month[i][j].price && (totalPrice += Number(month[i][j].price));
+    for (let i in monthObj) {
+      for (let j in monthObj[i]) {
+        monthObj[i][j].price && (totalPrice += Number(monthObj[i][j].price));
       }
     }
     return totalPrice;
@@ -63,8 +66,10 @@ export default function CalendarMonthlyScreen(props) {
     <View style={styles.container}>
       {/* SECTION Monthly Expenses */}
       <View style={styles.monthlyContainer}>
-        <Text style={{}}>{month + 1}월 지출 현황</Text>
-        <Text style={{}}>총 지출 : {numberWithCommas(monthTotal())} 원</Text>
+        <Text style={{}}>{dateObj.month + 1}월 지출 현황</Text>
+        <Text style={{}}>
+          총 지출 : {numberWithCommas(monthTotal(dateObj.month))} 원
+        </Text>
       </View>
 
       {/* SECTION Calendar */}
@@ -90,8 +95,8 @@ export default function CalendarMonthlyScreen(props) {
             '11월',
             '12월'
           ]}
-          previousTitle={`${month === 0 ? 12 : month}월`}
-          nextTitle={`${month === 11 ? 1 : month + 2}월`}
+          previousTitle={`${dateObj.month === 0 ? 12 : dateObj.month}월`}
+          nextTitle={`${dateObj.month === 11 ? 1 : dateObj.month + 2}월`}
           todayBackgroundColor={'#67B38C'}
           todayTextStyle={{ color: '#fff' }}
           selectedDayStyle={{
@@ -100,7 +105,7 @@ export default function CalendarMonthlyScreen(props) {
             height: '90%'
           }}
           selectedDayTextColor={'#fff'}
-          onMonthChange={month => setMonth(month._i.month)}
+          onMonthChange={month => setDateObj(month._i)}
           onDateChange={date => setSelectedDate(date._d)}
         />
       </View>
@@ -120,7 +125,7 @@ export default function CalendarMonthlyScreen(props) {
               <Text style={{ color: '#999' }}>데이터가 없습니다.</Text>
             </View>
           }
-          renderItem={({ item }) => (
+          renderItem={({ item }: any) => (
             <View style={styles.expenseDatail}>
               <Text>{item.type}</Text>
               <Text
