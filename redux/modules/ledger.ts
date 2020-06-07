@@ -55,7 +55,6 @@ const addLedgerList = (state, action) => {
   if (!newLedger && !newLedger.title && !newLedger.type && !newLedger.key)
     return;
 
-  alert('장부가 추가되었습니다.');
   return {
     ...state,
     list: {

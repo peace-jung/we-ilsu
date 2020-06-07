@@ -72,7 +72,11 @@ export default function AddExpenseDataScreen(props) {
                 onPress={() => setType(String([i, j]))}
               >
                 <Text
-                  style={{ color: '#000', fontSize: 14, textAlign: 'center' }}
+                  style={{
+                    fontSize: 16,
+                    textAlign: 'center',
+                    color: type === String([i, j]) ? '#fff' : '#000'
+                  }}
                 >
                   {item}
                 </Text>

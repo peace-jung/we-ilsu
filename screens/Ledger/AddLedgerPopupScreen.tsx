@@ -172,7 +172,7 @@ export default function AddLedgerPopupScreen(props) {
             </View>
 
             {/* SECTION Set Ledger Type */}
-            <View style={styles.addItemSection}>
+            {/* <View style={styles.addItemSection}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ marginRight: 12 }}>
                   <Text
@@ -221,7 +221,7 @@ export default function AddLedgerPopupScreen(props) {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
 
             {/* SECTION Add User Input */}
             {!type && (

@@ -24,10 +24,30 @@ const COLOR = [
   'rgb(121,85,71)' // brown
 ];
 
+// NOTE - 천단위 콤마
+const numberWithCommas = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 export default function LedgerScreen(props) {
   // redux hook
   const { list } = useSelector(state => state.ledger);
   const dispatch = useDispatch();
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  const getTotalPrice = key => {
+    const data = list?.[key]?.['history']?.[currentYear]?.[currentMonth] || [];
+    let totalPrice = 0;
+    for (let i in data) {
+      for (let j in data[i]) {
+        totalPrice += data[i][j].price;
+      }
+    }
+    return totalPrice;
+  };
 
   // state
   const [addModal, setAddModal] = useState(false);
@@ -90,7 +110,14 @@ export default function LedgerScreen(props) {
                 <Text style={{ color: '#00bcd4', fontSize: 14 }}>그룹</Text>
               )}
             </View> */}
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
               <Text
                 ellipsizeMode={'tail'}
                 numberOfLines={1}
@@ -102,6 +129,14 @@ export default function LedgerScreen(props) {
                 }}
               >
                 {list[item].title}
+              </Text>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 18
+                }}
+              >
+                {numberWithCommas(getTotalPrice(item))} 원
               </Text>
             </View>
           </TouchableOpacity>
@@ -150,7 +185,7 @@ const styles = StyleSheet.create({
   },
   renderItem: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 12,
     marginBottom: 10,
     borderRadius: 20,
     height: 100,

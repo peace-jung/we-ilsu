@@ -130,8 +130,8 @@ export default function CalendarMonthlyScreen(props) {
               <Text style={{ color: '#999' }}>데이터가 없습니다.</Text>
             </View>
           }
-          renderItem={({ item }: any) => (
-            <View style={styles.expenseDatail}>
+          renderItem={({ item, index }: any) => (
+            <View style={styles.expenseDatail} key={index}>
               <Text>{item.type}</Text>
               <Text
                 ellipsizeMode={'tail'}
