@@ -38,6 +38,11 @@ export default function CalendarMonthlyScreen(props) {
   const selectedMonth = selectedDate.getMonth();
   const selectedData = selectedDate.getDate();
 
+  // month history
+  const monthHistory = list[selected].history[dateObj.year]
+    ? list[selected].history[dateObj.year][dateObj.month]
+    : {};
+
   // ANCHOR history
   const expenseHistory = list[selected].history[selectedYear]
     ? list[selected].history[selectedYear][selectedMonth]
@@ -100,13 +105,11 @@ export default function CalendarMonthlyScreen(props) {
           nextTitle={`${dateObj.month === 11 ? 1 : dateObj.month + 2}월`}
           todayBackgroundColor={'#67B38C'}
           todayTextStyle={{ color: '#fff' }}
-          customContainerStyle={{backgroundColor: 'red'}}
           selectedDayStyle={{
-            backgroundColor: '#FFD002',
-            width: '90%',
-            height: '90%'
+            backgroundColor: '#FFD002'
           }}
           selectedDayTextColor={'#fff'}
+          monthHistory={monthHistory}
           onMonthChange={month => setDateObj(month._i)}
           onDateChange={date => setSelectedDate(date._d)}
         />
