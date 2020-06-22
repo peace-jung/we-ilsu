@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 // import CalendarPicker from 'react-native-calendar-picker';
 import CalendarPicker from '@lib/react-native-calendar-picker';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 // NOTE get device screen size
 const { width: dWidth, height: dHeight } = Dimensions.get('screen');
@@ -30,6 +31,7 @@ export default function CalendarMonthlyScreen(props) {
   const { list, selected } = useSelector(state => state.ledger);
 
   // state
+  const [addButton, setAddButton] = useState(true);
   const [dateObj, setDateObj] = useState({
     year: new Date().getFullYear(),
     month: new Date().getMonth()
@@ -77,6 +79,31 @@ export default function CalendarMonthlyScreen(props) {
       picked: selectedCalendar,
       index
     });
+  };
+
+  const renderRightActions = (progress, dragX, index) => {
+    const trans = dragX.interpolate({
+      inputRange: [0, 30, 45, 60],
+      outputRange: [60, 90, 120, 150]
+    });
+
+    return (
+      <Animated.View style={{ transform: [{ translateX: trans }] }}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => handleDeleteItem(index)}
+          style={{
+            flex: 1,
+            width: 60,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#ff8170'
+          }}
+        >
+          <Text style={{ color: '#fff' }}>삭제</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    );
   };
 
   return (
@@ -127,7 +154,11 @@ export default function CalendarMonthlyScreen(props) {
       </View>
 
       {/* SECTION Detail Information About One Day Expenses */}
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView
+        onScrollBeginDrag={() => setAddButton(false)}
+        onScrollEndDrag={() => setAddButton(true)}
+        style={{ flex: 1 }}
+      >
         <FlatList
           data={Object.values(expenseHistory)}
           ListEmptyComponent={
@@ -142,40 +173,47 @@ export default function CalendarMonthlyScreen(props) {
             </View>
           }
           renderItem={({ item, index }: any) => (
-            <TouchableOpacity
-              style={styles.expenseDatail}
-              key={index}
-              onLongPress={() => {
-                handleDeleteItem(index);
-              }}
-            >
-              <Text>{item.type}</Text>
-              <Text
-                ellipsizeMode={'tail'}
-                numberOfLines={1}
-                style={{ flex: 1, marginHorizontal: 15 }}
+            <View key={index} style={styles.expenseItem}>
+              <Swipeable
+                renderRightActions={(progress, dragX) =>
+                  renderRightActions(progress, dragX, index)
+                }
               >
-                {item.usage}
-              </Text>
-              <Text>{numberWithCommas(Number(item.price))}원</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={styles.expenseDatail}
+                >
+                  <Text>{item.type}</Text>
+                  <Text
+                    ellipsizeMode={'tail'}
+                    numberOfLines={1}
+                    style={{ flex: 1, marginHorizontal: 15 }}
+                  >
+                    {item.usage}
+                  </Text>
+                  <Text>{numberWithCommas(Number(item.price))}원</Text>
+                </TouchableOpacity>
+              </Swipeable>
+            </View>
           )}
         />
       </ScrollView>
 
-      <View style={styles.addIconCover}>
-        <TouchableOpacity
-          onPress={() => {
-            props.navigation.navigate({
-              routeName: 'AddExpenseData',
-              params: { selectedDate: selectedCalendar }
-            });
-          }}
-          style={styles.addIconButton}
-        >
-          <Ionicons name={'md-add'} size={36} color={'#fff'} />
-        </TouchableOpacity>
-      </View>
+      {addButton && (
+        <View style={styles.addIconCover}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate({
+                routeName: 'AddExpenseData',
+                params: { selectedDate: selectedCalendar }
+              });
+            }}
+            style={styles.addIconButton}
+          >
+            <Ionicons name={'md-add'} size={36} color={'#fff'} />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -204,13 +242,15 @@ const styles = StyleSheet.create({
     // height: Math.min(dWidth, dHeight),
     // backgroundColor: '#ececec'
   },
+  expenseItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ececec'
+  },
   expenseDatail: {
     flexDirection: 'row',
+    alignItems: 'center',
     height: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ececec',
-    padding: 8,
-    alignItems: 'center'
+    padding: 8
   },
   // add button
   addIconCover: {
