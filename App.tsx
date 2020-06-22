@@ -1,4 +1,4 @@
-import { AppLoading } from 'expo';
+import { AppLoading, Updates } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
@@ -31,7 +31,9 @@ export default function App(props) {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="light-content" hidden={false} />}
+            {Platform.OS === 'ios' && (
+              <StatusBar barStyle="light-content" hidden={false} />
+            )}
             <AppNavigator />
           </View>
         </PersistGate>
@@ -40,7 +42,22 @@ export default function App(props) {
   }
 }
 
+/**
+ * handleAppUpdate
+ * 앱 업데이트 확인 후 업데이트 진행
+ */
+const handleAppUpdate = async () => {
+  const hasUpdate = await Updates.checkForUpdateAsync(); // 서버로부터 업데이트 확인
+  if (hasUpdate.isAvailable) {
+    await Updates.fetchUpdateAsync(); // 최신업데이트 동기화, 로컬 캐시에 저장
+    Updates.reloadFromCache();
+  }
+};
+
+// 앱 로드시 필요한 리소스 미리 로딩
 async function loadResourcesAsync() {
+  await handleAppUpdate();
+
   await Promise.all([
     Asset.loadAsync([
       require('./assets/images/robot-dev.png'),
