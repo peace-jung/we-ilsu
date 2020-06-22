@@ -2,6 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "sudo expo start",
+    "publish": "sudo expo publish --release-channel default",
     "android": "sudo expo start --android",
     "ios": "sudo expo start --ios",
     "web": "expo start --web",
