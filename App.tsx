@@ -1,4 +1,5 @@
-import { AppLoading, Updates } from 'expo';
+import { AppLoading } from 'expo';
+import * as Updates from 'expo-updates';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
@@ -50,7 +51,7 @@ const handleAppUpdate = async () => {
   const hasUpdate = await Updates.checkForUpdateAsync(); // 서버로부터 업데이트 확인
   if (hasUpdate.isAvailable) {
     await Updates.fetchUpdateAsync(); // 최신업데이트 동기화, 로컬 캐시에 저장
-    Updates.reloadFromCache();
+    Updates.reloadAsync();
   }
 };
 

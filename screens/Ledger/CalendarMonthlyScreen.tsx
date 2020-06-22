@@ -24,6 +24,8 @@ const numberWithCommas = x => {
 };
 
 export default function CalendarMonthlyScreen(props) {
+  const dispatch = useDispatch();
+
   // redux hook
   const { list, selected } = useSelector(state => state.ledger);
 
@@ -32,11 +34,11 @@ export default function CalendarMonthlyScreen(props) {
     year: new Date().getFullYear(),
     month: new Date().getMonth()
   });
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedCalendar, setSelectedCalendar] = useState(new Date());
 
-  const selectedYear = selectedDate.getFullYear();
-  const selectedMonth = selectedDate.getMonth();
-  const selectedData = selectedDate.getDate();
+  const selectedYear = selectedCalendar.getFullYear();
+  const selectedMonth = selectedCalendar.getMonth();
+  const selectedDate = selectedCalendar.getDate();
 
   // month history
   const monthHistory = list[selected].history[dateObj.year]
@@ -46,8 +48,8 @@ export default function CalendarMonthlyScreen(props) {
   // ANCHOR history
   const expenseHistory = list[selected].history[selectedYear]
     ? list[selected].history[selectedYear][selectedMonth]
-      ? list[selected].history[selectedYear][selectedMonth][selectedData]
-        ? list[selected].history[selectedYear][selectedMonth][selectedData]
+      ? list[selected].history[selectedYear][selectedMonth][selectedDate]
+        ? list[selected].history[selectedYear][selectedMonth][selectedDate]
         : {}
       : {}
     : {};
@@ -66,6 +68,15 @@ export default function CalendarMonthlyScreen(props) {
       }
     }
     return totalPrice;
+  };
+
+  // 선택한 항목 삭제
+  const handleDeleteItem = index => {
+    dispatch({
+      type: 'DELETE_HISTORY_ITEM',
+      picked: selectedCalendar,
+      index
+    });
   };
 
   return (
@@ -111,7 +122,7 @@ export default function CalendarMonthlyScreen(props) {
           selectedDayTextColor={'#fff'}
           monthHistory={monthHistory}
           onMonthChange={month => setDateObj(month._i)}
-          onDateChange={date => setSelectedDate(date._d)}
+          onDateChange={date => setSelectedCalendar(date._d)}
         />
       </View>
 
@@ -131,7 +142,13 @@ export default function CalendarMonthlyScreen(props) {
             </View>
           }
           renderItem={({ item, index }: any) => (
-            <View style={styles.expenseDatail} key={index}>
+            <TouchableOpacity
+              style={styles.expenseDatail}
+              key={index}
+              onLongPress={() => {
+                handleDeleteItem(index);
+              }}
+            >
               <Text>{item.type}</Text>
               <Text
                 ellipsizeMode={'tail'}
@@ -141,7 +158,7 @@ export default function CalendarMonthlyScreen(props) {
                 {item.usage}
               </Text>
               <Text>{numberWithCommas(Number(item.price))}원</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </ScrollView>
@@ -151,7 +168,7 @@ export default function CalendarMonthlyScreen(props) {
           onPress={() => {
             props.navigation.navigate({
               routeName: 'AddExpenseData',
-              params: { selectedDate }
+              params: { selectedDate: selectedCalendar }
             });
           }}
           style={styles.addIconButton}

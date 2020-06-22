@@ -23,6 +23,7 @@
     "expo-asset": "~8.1.5",
     "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
+    "expo-updates": "~0.2.1",
     "expo-web-browser": "~8.2.1",
     "moment": "^2.24.0",
     "react": "16.9.0",

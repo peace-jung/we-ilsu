@@ -5,7 +5,12 @@ const UPDATE_ONE_LEDGER = 'UPDATE_ONE_LEDGER';
 const DELETE_LEDGER_ITEM = 'DELETE_LEDGER_ITEM';
 const SET_SELECTED_ITEM = 'SET_SELECTED_ITEM';
 const ADD_HISTORY_ITEM = 'ADD_HISTORY_ITEM';
+const DELETE_HISTORY_ITEM = 'DELETE_HISTORY_ITEM';
 
+/**
+ * initialState
+ * list > 장부 키(생성일) > 데이터
+ */
 const initialState = {
   list: {
     [String(Date.now())]: {
@@ -42,6 +47,8 @@ function reducer(state = initialState, action) {
       return setSelectedItem(state, action);
     case ADD_HISTORY_ITEM:
       return addHistoryItem(state, action);
+    case DELETE_HISTORY_ITEM:
+      return deleteHistoryItem(state, action);
     default:
       return state;
   }
@@ -126,6 +133,35 @@ const addHistoryItem = (state, action) => {
   if (!newList[selected].history[year][month][date])
     newList[selected].history[year][month][date] = [];
   newList[selected].history[year][month][date].push(data);
+
+  return {
+    ...state,
+    list: newList
+  };
+};
+
+/**
+ * deleteHistoryItem
+ * 선택 항목 삭제
+ * @param state
+ * @param action
+ */
+const deleteHistoryItem = (state, action) => {
+  const { list, selected } = state;
+  // picked: 선택된 날짜, index: 선택된 index
+  // TODO - index 대신 id 넣기
+  const { picked, index } = action;
+
+  const newList = JSON.parse(JSON.stringify(list));
+  const parseDate = new Date(Number(picked));
+
+  const selectedYear = parseDate.getFullYear();
+  const selectedMonth = parseDate.getMonth();
+  const selectedDate = parseDate.getDate();
+
+  newList[selected]?.history?.[selectedYear]?.[selectedMonth]?.[
+    selectedDate
+  ]?.splice(index, 1);
 
   return {
     ...state,
